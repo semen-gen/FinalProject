@@ -1,22 +1,24 @@
 package by.itacademy.view;
 
-import java.util.Scanner;
+import by.itacademy.service.ConsoleService;
 
 public class Console {
 
-  private final Scanner SCANNER;
+  private final ConsoleService CS;
 
   public Console() {
-    SCANNER = new Scanner(System.in);
+    CS = new ConsoleService();
   }
 
   public void start() {
-    printAuthMenu();
+    printWelcomeMenu();
   }
 
-  private void printAuthMenu() {
+  private void printWelcomeMenu() {
     System.out.println("Авторизуйтесь или зарегистрируйтесь");
     System.out.println("1. Авторизация");
     System.out.println("2. Регистрация");
+    System.out.println("3. Выйти");
+    CS.welcomeMenu();
   }
 }
