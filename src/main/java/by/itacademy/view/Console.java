@@ -7,7 +7,7 @@ public class Console {
   private final ConsoleService CS;
 
   public Console() {
-    CS = new ConsoleService();
+    CS = new ConsoleService(this);
   }
 
   public void start() {
