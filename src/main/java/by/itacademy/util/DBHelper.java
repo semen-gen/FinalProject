@@ -27,7 +27,7 @@ public class DBHelper {
     return instance;
   }
 
-  public Connection openConnection() throws SQLException {
+  public Connection openConnection() {
 
     try {
       Class.forName(JDBC_DRIVER);
