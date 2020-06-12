@@ -20,4 +20,8 @@ public class UserService {
   public User getCurrentUser() {
     return currentUser;
   }
+
+  public boolean isUserLogin(String login) {
+    return DB.isSetLogin(login);
+  }
 }

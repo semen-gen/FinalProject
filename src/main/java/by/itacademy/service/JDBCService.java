@@ -49,6 +49,32 @@ public class JDBCService {
     return user;
   }
 
+  public boolean isSetLogin(String login) {
+
+    boolean result = true;
+    DBHelper dbHelper = DBHelper.getInstance();
+    Connection connection = dbHelper.openConnection();
+
+    String query = "SELECT DISTINCT login FROM p_user  WHERE login=? ;";
+    PreparedStatement preparedStatement = dbHelper.openStatement(connection, query);
+
+    try {
+      preparedStatement.setString(1, login);
+      ResultSet resultSet = dbHelper.openResultSet(preparedStatement);
+
+      result = resultSet.next();
+
+      dbHelper.closeResultSet(resultSet);
+      dbHelper.closeStatement(preparedStatement);
+      dbHelper.closeConnection(connection);
+
+    } catch (SQLException exception) {
+      exception.printStackTrace();
+    }
+
+    return result;
+  }
+
 //  private static Ticket getTickets() {
 //    return null;
 //  }
