@@ -39,7 +39,40 @@ public class ConsoleService {
         }
       }
     }
+    exit();
   }
+
+  public void cinemaMenu() {
+    exit:
+    {
+      while (SCANNER.hasNext()) {
+        if (SCANNER.hasNextInt()) {
+          switch (SCANNER.nextInt()) {
+            case 1:
+              System.out.println("1. Спиок фильмов");
+              break;
+            case 2:
+              System.out.println("2. Купить билеты");
+              break;
+            case 3:
+              System.out.println("3. Вернуть билет");
+              break;
+            case 4:
+              System.out.println("4. Твои билеты");
+              break;
+            case 5:
+              break exit;
+            default:
+              System.out.println("Такого пункта не существует");
+          }
+        } else {
+          System.out.println("Вы ввели неверные данные " + SCANNER.next());
+        }
+      }
+    }
+    exit();
+  }
+
 
   private void auth() {
 
@@ -57,6 +90,14 @@ public class ConsoleService {
       System.out.println("Неверный логин или парорль");
       System.out.println();
       CONSOLE.start();
+    } else {
+      CONSOLE.printCinemaMenu();
     }
+  }
+
+  private void exit() {
+    SCANNER.close();
+//    CS.saveChange(currentUser);
+    System.exit(0);
   }
 }

@@ -21,4 +21,14 @@ public class Console {
     System.out.println("3. Выйти");
     CS.welcomeMenu();
   }
+
+  public void printCinemaMenu() {
+    System.out.println("Меню кинотевтра");
+    System.out.println("1. Спиок фильмов");
+    System.out.println("2. Купить билеты");
+    System.out.println("3. Вернуть билет");
+    System.out.println("4. Твои билеты");
+    System.out.println("5. Выйти");
+    CS.cinemaMenu();
+  }
 }
