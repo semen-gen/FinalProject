@@ -1,33 +1,28 @@
 package by.itacademy.service;
 
 
-import by.itacademy.model.Ticket;
 import by.itacademy.model.User;
-import by.itacademy.model.UserType;
 import by.itacademy.util.DBHelper;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class JDBCService {
 
   public User getUserByAuth(String login, String pass) {
-
     User user = null;
     DBHelper dbHelper = DBHelper.getInstance();
     Connection connection = dbHelper.openConnection();
 
     String query = "SELECT * FROM p_user  WHERE login=? AND pass=?;";
-    PreparedStatement preparedStatement = dbHelper.openStatement(connection, query);
+    PreparedStatement preparedStatement = dbHelper.openPreparedStatement(connection, query);
 
     try {
       preparedStatement.setString(1, login);
       preparedStatement.setString(2, pass);
 
-      ResultSet resultSet = dbHelper.openResultSet(preparedStatement);
+      ResultSet resultSet = dbHelper.openPreparedResultSet();
 
       if (resultSet.next()) {
         String rLogin, rPass;
@@ -38,8 +33,8 @@ public class JDBCService {
         user = new User(rID, rLogin, rPass);
       }
 
-      dbHelper.closeResultSet(resultSet);
-      dbHelper.closeStatement(preparedStatement);
+      dbHelper.closePreparedResultSet(resultSet);
+      dbHelper.closePreparedStatement();
       dbHelper.closeConnection(connection);
 
     } catch (SQLException exception) {
@@ -50,22 +45,21 @@ public class JDBCService {
   }
 
   public boolean isSetLogin(String login) {
-
     boolean result = true;
     DBHelper dbHelper = DBHelper.getInstance();
     Connection connection = dbHelper.openConnection();
 
     String query = "SELECT DISTINCT login FROM p_user  WHERE login=? ;";
-    PreparedStatement preparedStatement = dbHelper.openStatement(connection, query);
+    PreparedStatement preparedStatement = dbHelper.openPreparedStatement(connection, query);
 
     try {
       preparedStatement.setString(1, login);
-      ResultSet resultSet = dbHelper.openResultSet(preparedStatement);
+      ResultSet resultSet = dbHelper.openPreparedResultSet();
 
       result = resultSet.next();
 
-      dbHelper.closeResultSet(resultSet);
-      dbHelper.closeStatement(preparedStatement);
+      dbHelper.closePreparedResultSet(resultSet);
+      dbHelper.closePreparedStatement();
       dbHelper.closeConnection(connection);
 
     } catch (SQLException exception) {
@@ -73,6 +67,25 @@ public class JDBCService {
     }
 
     return result;
+  }
+
+  public User addUser(String login, String pass) {
+    User user = null;
+    DBHelper dbHelper = DBHelper.getInstance();
+    Connection connection = dbHelper.openConnection();
+
+    String query = "INSERT INTO p_user VALUES (DEFAULT, \"" + login + "\",\"" + pass + "\" );";
+    dbHelper.openStatement(connection);
+    int id = dbHelper.insert(query);
+
+    dbHelper.closeStatement();
+    dbHelper.closeConnection(connection);
+
+    if (id > 0) {
+      user = new User(id, login, pass);
+    }
+
+    return user;
   }
 
 //  private static Ticket getTickets() {

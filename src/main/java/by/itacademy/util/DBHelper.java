@@ -2,6 +2,7 @@ package by.itacademy.util;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.Statement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,19 +17,19 @@ public class DBHelper {
   private static DBHelper instance;
 
   Connection connection;
-  PreparedStatement statement;
+  PreparedStatement preparedStatement;
+  Statement statement;
   ResultSet resultSet;
 
   public static DBHelper getInstance() {
-
     if (instance == null) {
       instance = new DBHelper();
     }
+
     return instance;
   }
 
   public Connection openConnection() {
-
     try {
       Class.forName(JDBC_DRIVER);
       connection = DriverManager.getConnection(DATABASE_URL, USER, PASSWORD);
@@ -40,7 +41,6 @@ public class DBHelper {
   }
 
   public void closeConnection(Connection connection) {
-
     if (connection != null) {
       try {
         connection.close();
@@ -50,19 +50,56 @@ public class DBHelper {
     }
   }
 
-  public PreparedStatement openStatement(Connection connection, String query) {
-
+  public PreparedStatement openPreparedStatement(Connection connection, String query) {
     try {
-      statement = connection.prepareStatement(query);
+      preparedStatement = connection.prepareStatement(query);
     } catch (SQLException e) {
       e.printStackTrace();
     }
 
-    return statement;
+    return preparedStatement;
   }
 
-  public void closeStatement(PreparedStatement preparedStatement) {
+  public void closePreparedStatement() {
+    if (preparedStatement != null) {
+      try {
+        preparedStatement.close();
+      } catch (SQLException e) {
+        e.printStackTrace();
+      }
+    }
+  }
 
+  public ResultSet openPreparedResultSet() {
+    try {
+      resultSet = preparedStatement.executeQuery();
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+
+    return resultSet;
+  }
+
+  public void closePreparedResultSet(ResultSet resultSet) {
+    if (resultSet != null) {
+      try {
+        resultSet.close();
+      } catch (SQLException e) {
+        e.printStackTrace();
+      }
+    }
+  }
+
+  public void openStatement(Connection connection) {
+    try {
+      statement = connection.createStatement();
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+
+  }
+
+  public void closeStatement() {
     if (statement != null) {
       try {
         statement.close();
@@ -72,26 +109,19 @@ public class DBHelper {
     }
   }
 
-  public ResultSet openResultSet(PreparedStatement preparedStatement) {
+  public int insert(String query) {
+    int id = 0;
 
     try {
-      resultSet = statement.executeQuery();
+      statement.executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
+      ResultSet rs = statement.getGeneratedKeys();
+      rs.next();
+      id = rs.getInt(1);
     } catch (SQLException e) {
       e.printStackTrace();
     }
 
-    return resultSet;
-  }
-
-  public void closeResultSet(ResultSet resultSet) {
-
-    if (resultSet != null) {
-      try {
-        resultSet.close();
-      } catch (SQLException e) {
-        e.printStackTrace();
-      }
-    }
+    return id;
   }
 
 }

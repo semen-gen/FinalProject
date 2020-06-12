@@ -11,7 +11,6 @@ public class ConsoleService {
   private final UserService US;
 
   public ConsoleService(Console console) {
-
     CONSOLE = console;
     SCANNER = new Scanner(System.in);
     US = new UserService();
@@ -27,7 +26,7 @@ public class ConsoleService {
               auth();
               break;
             case 2:
-              System.out.println("Второй пункт");
+              registration();
               break;
             case 3:
               break exit;
@@ -74,8 +73,29 @@ public class ConsoleService {
   }
 
 
-  private void auth() {
+  private void registration() {
+    String login, pass;
 
+    System.out.println("Введите логин");
+    login = SCANNER.next();
+    checkLogin(US.isUserLogin(login));
+
+    System.out.println("Введите пароль");
+    pass = SCANNER.next();
+
+    User user = US.userRegister(login, pass);
+
+    checkUser(user, "Не удалось зарегистрироваться!");
+  }
+
+  private void checkLogin(boolean isUser) {
+    if (isUser) {
+      System.out.println("Этот логин уже занят!");
+      registration();
+    }
+  }
+
+  private void auth() {
     String login, pass;
     System.out.println("Введите логин");
     login = SCANNER.next();
@@ -86,18 +106,21 @@ public class ConsoleService {
   }
 
   private void checkUser(User user) {
+    checkUser(user, "Неверный логин или парорль");
+  }
+
+  private void checkUser(User user, String errorMessage) {
     if (user == null) {
-      System.out.println("Неверный логин или парорль");
+      System.out.println(errorMessage);
       System.out.println();
       CONSOLE.start();
     } else {
-      CONSOLE.printCinemaMenu();
+      CONSOLE.printCinemaMenu(user.getLogin());
     }
   }
 
   private void exit() {
     SCANNER.close();
-//    CS.saveChange(currentUser);
     System.exit(0);
   }
 }

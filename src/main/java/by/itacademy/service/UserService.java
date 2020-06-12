@@ -8,12 +8,10 @@ public class UserService {
   private User currentUser;
 
   public UserService() {
-
     DB = new JDBCService();
   }
 
   public User userAuth(String login, String pass) {
-
     return currentUser = DB.getUserByAuth(login, pass);
   }
 
@@ -23,5 +21,9 @@ public class UserService {
 
   public boolean isUserLogin(String login) {
     return DB.isSetLogin(login);
+  }
+
+  public User userRegister(String login, String pass) {
+    return currentUser = DB.addUser(login, pass);
   }
 }
