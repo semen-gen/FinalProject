@@ -1,19 +1,20 @@
 package by.itacademy.model;
 
-import java.util.Calendar;
+import java.sql.Date;
+import java.time.LocalDateTime;
 
 public class Movie {
 
   private final int ID;
   private String name;
-  private Calendar filmDate;
+  private Date filmDate;
   private int price;
 
-  public Movie(String name, Calendar filmDate, int price) {
+  public Movie(String name, Date filmDate, int price) {
     this(0, name, filmDate, price);
   }
 
-  public Movie(int id, String name, Calendar filmDate, int price) {
+  public Movie(int id, String name, Date filmDate, int price) {
     ID = id;
     this.name = name;
     this.filmDate = filmDate;
@@ -28,11 +29,16 @@ public class Movie {
     return name;
   }
 
-  public Calendar getFilmDate() {
+  public Date getFilmDate() {
     return filmDate;
   }
 
   public int getPrice() {
     return price;
+  }
+
+  @Override
+  public String toString() {
+    return ID + ". " + name + " показ: " + filmDate + " цена:" + price;
   }
 }

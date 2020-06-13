@@ -24,7 +24,7 @@ public class Console {
 
   public void printCinemaMenu(String login) {
     System.out.println("Здравствуйте, "+ login);
-    System.out.println("Меню кинотевтра");
+    System.out.println("Меню кинотеатра");
     System.out.println("1. Спиок фильмов");
     System.out.println("2. Купить билеты");
     System.out.println("3. Вернуть билет");

@@ -8,7 +8,7 @@ public class UserService {
   private User currentUser;
 
   public UserService() {
-    DB = new JDBCService();
+    DB = JDBCService.getInstance();
   }
 
   public User userAuth(String login, String pass) {

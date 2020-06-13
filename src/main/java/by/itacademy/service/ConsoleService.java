@@ -1,7 +1,9 @@
 package by.itacademy.service;
 
+import by.itacademy.model.Movie;
 import by.itacademy.model.User;
 import by.itacademy.view.Console;
+import java.util.List;
 import java.util.Scanner;
 
 public class ConsoleService {
@@ -9,11 +11,13 @@ public class ConsoleService {
   private final Scanner SCANNER;
   private final Console CONSOLE;
   private final UserService US;
+  private final MovieService MS;
 
   public ConsoleService(Console console) {
     CONSOLE = console;
     SCANNER = new Scanner(System.in);
     US = new UserService();
+    MS = new MovieService();
   }
 
   public void welcomeMenu() {
@@ -48,7 +52,8 @@ public class ConsoleService {
         if (SCANNER.hasNextInt()) {
           switch (SCANNER.nextInt()) {
             case 1:
-              System.out.println("1. Спиок фильмов");
+              printMovies(MS.getMovies());
+              getTickets();
               break;
             case 2:
               System.out.println("2. Купить билеты");
@@ -72,6 +77,33 @@ public class ConsoleService {
     exit();
   }
 
+  private void getTickets() {
+    while (SCANNER.hasNext()) {
+      if (SCANNER.hasNextInt()) {
+        if(MS.checkMovie(SCANNER.nextInt())){
+
+          printAvalableTikets();
+        }
+        else{
+          System.out.println("Вы ввели неправильный id фильма");
+        }
+      } else {
+        System.out.println("Вы ввели неверные данные " + SCANNER.next());
+      }
+    }
+  }
+
+  private void printAvalableTikets() {
+
+  }
+
+
+  private void printMovies(List<Movie> movies) {
+    System.out.println("Выберите фильм");
+    for (Movie item : movies) {
+      System.out.println(item);
+    }
+  }
 
   private void registration() {
     String login, pass;
