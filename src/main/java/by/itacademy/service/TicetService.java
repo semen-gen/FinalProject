@@ -1,6 +1,7 @@
 package by.itacademy.service;
 
 import by.itacademy.model.Ticket;
+import by.itacademy.model.User;
 import java.util.List;
 
 public class TicetService {
@@ -21,5 +22,9 @@ public class TicetService {
 
   public void addUserToTickets(List<Integer> ids, int userId) {
     DB.updateTickets(ids, userId);
+  }
+
+  public List<Ticket> getUserTickets(User currentUser) {
+    return DB.userTickets(currentUser);
   }
 }

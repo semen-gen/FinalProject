@@ -245,4 +245,45 @@ public class JDBCService {
     dbHelper.closeStatement();
     dbHelper.closeConnection(connection);
   }
+
+  public List<Ticket> userTickets(User currentUser) {
+    List<Ticket> result = new ArrayList<>();
+    DBHelper db = DBHelper.getInstance();
+    Connection connection = db.openConnection();
+
+    String query = "SELECT t.ID, t.movie_id, t.ticket_seat_id, ts.row, ts.place "
+        + "FROM p_ticket AS t "
+        + "LEFT JOIN p_ticket_seat AS ts "
+        + "ON t.ticket_seat_id = ts.ID "
+        + "WHERE user_id = " + currentUser.getID() + ";";
+    db.openPreparedStatement(connection, query);
+
+    ResultSet resultSet = db.openPreparedResultSet();
+    try {
+
+      while (resultSet.next()) {
+        result.add(
+            new Ticket(
+                resultSet.getInt("ID"),
+                resultSet.getInt("movie_id"),
+                new TicketSeat(
+                    resultSet.getInt("ticket_seat_id"),
+                    resultSet.getInt("row"),
+                    resultSet.getInt("place")
+                )
+            )
+        );
+      }
+
+    } catch (SQLException exception) {
+      exception.printStackTrace();
+    } finally {
+
+      db.closePreparedResultSet(resultSet);
+      db.closePreparedStatement();
+      db.closeConnection(connection);
+    }
+
+    return result;
+  }
 }

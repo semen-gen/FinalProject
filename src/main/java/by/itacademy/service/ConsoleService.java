@@ -70,7 +70,8 @@ public class ConsoleService {
               System.out.println("3. Вернуть билет");
               break;
             case 4:
-              System.out.println("4. Твои билеты");
+              printUserTickets();
+              CONSOLE.printCinemaMenu();
               break;
             case 5:
               break exit;
@@ -96,6 +97,14 @@ public class ConsoleService {
         System.out.println("Билеты преобретены");
         CONSOLE.printCinemaMenu();
       }
+    }
+  }
+
+  private void printUserTickets() {
+    Map<Integer, Movie> map = MS.getMovies();
+    List<Ticket> userTickets = TS.getUserTickets(US.getCurrentUser());
+    for (Ticket item : userTickets) {
+      System.out.println(item + " - " + map.get(item.getMOVIE_ID()).getName());
     }
   }
 
