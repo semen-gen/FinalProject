@@ -1,18 +1,18 @@
 package by.itacademy.service;
 
 import by.itacademy.model.Movie;
-import java.util.List;
+import java.util.Map;
 
 public class MovieService {
 
   private final JDBCService DB;
-  private List<Movie> movies;
+  private Map<Integer, Movie> movies;
 
   public MovieService() {
     DB = JDBCService.getInstance();
   }
 
-  public List<Movie> getMovies() {
+  public Map<Integer, Movie> getMovies() {
     if (movies == null) {
       movies = DB.getAllMovies();
     }

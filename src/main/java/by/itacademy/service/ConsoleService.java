@@ -1,9 +1,11 @@
 package by.itacademy.service;
 
 import by.itacademy.model.Movie;
+import by.itacademy.model.Ticket;
 import by.itacademy.model.User;
 import by.itacademy.view.Console;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 public class ConsoleService {
@@ -12,12 +14,14 @@ public class ConsoleService {
   private final Console CONSOLE;
   private final UserService US;
   private final MovieService MS;
+  private final TicetService TS;
 
   public ConsoleService(Console console) {
     CONSOLE = console;
     SCANNER = new Scanner(System.in);
     US = new UserService();
     MS = new MovieService();
+    TS = new TicetService();
   }
 
   public void welcomeMenu() {
@@ -78,13 +82,14 @@ public class ConsoleService {
   }
 
   private void getTickets() {
+    int id;
     while (SCANNER.hasNext()) {
       if (SCANNER.hasNextInt()) {
-        if(MS.checkMovie(SCANNER.nextInt())){
-
-          printAvalableTikets();
-        }
-        else{
+        id = SCANNER.nextInt();
+        if (MS.checkMovie(id)) {
+          printAvailableTickets(TS.getAvailableTickets(id), id);
+          CONSOLE.printCinemaMenu();
+        } else {
           System.out.println("Вы ввели неправильный id фильма");
         }
       } else {
@@ -93,15 +98,19 @@ public class ConsoleService {
     }
   }
 
-  private void printAvalableTikets() {
-
+  private void printAvailableTickets(List<Ticket> availableTickets, int movie_id) {
+    Map<Integer, Movie> map = MS.getMovies();
+    System.out.println("Билеты на фильм " + map.get(movie_id).getName());
+    for (Ticket item : availableTickets) {
+      System.out.println(item);
+    }
   }
 
 
-  private void printMovies(List<Movie> movies) {
+  private void printMovies(Map<Integer, Movie> movies) {
     System.out.println("Выберите фильм");
-    for (Movie item : movies) {
-      System.out.println(item);
+    for (Map.Entry<Integer, Movie> item : movies.entrySet()) {
+      System.out.println(item.getValue());
     }
   }
 

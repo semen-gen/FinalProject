@@ -1,17 +1,18 @@
 package by.itacademy.service;
 
-
 import by.itacademy.model.Movie;
+import by.itacademy.model.Ticket;
+import by.itacademy.model.TicketSeat;
 import by.itacademy.model.User;
 import by.itacademy.util.DBHelper;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class JDBCService {
 
@@ -107,8 +108,8 @@ public class JDBCService {
     return user;
   }
 
-  public List<Movie> getAllMovies() {
-    List<Movie> list = new ArrayList<>();
+  public Map<Integer, Movie> getAllMovies() {
+    Map<Integer, Movie> map = new HashMap<>();
     DBHelper db = DBHelper.getInstance();
     Connection connection = db.openConnection();
 
@@ -118,12 +119,15 @@ public class JDBCService {
 
     try {
       while (resultSet.next()) {
-        list.add(new Movie(
+        map.put(
             resultSet.getInt("ID"),
-            resultSet.getString("name"),
-            resultSet.getDate("film_date"),
-            resultSet.getInt("price")
-        ));
+            new Movie(
+                resultSet.getInt("ID"),
+                resultSet.getString("name"),
+                resultSet.getDate("film_date"),
+                resultSet.getInt("price")
+            )
+        );
       }
     } catch (SQLException exception) {
       exception.printStackTrace();
@@ -133,7 +137,7 @@ public class JDBCService {
       db.closeConnection(connection);
     }
 
-    return list;
+    return map;
   }
 
   public boolean isMovie(int i) {
@@ -161,37 +165,41 @@ public class JDBCService {
     return result;
   }
 
-//  private static Ticket getTickets() {
-//    return null;
-//  }
+  public List<Ticket> availableTickets(int id) {
+    List<Ticket> result = new ArrayList<>();
+    DBHelper db = DBHelper.getInstance();
+    Connection connection = db.openConnection();
 
-//  public List<User> getAllUsers() throws SQLException {
-//    DBHelper dbHelper = DBHelper.getInstance();
-//
-//    Connection connection = dbHelper.openConnection();
-//    PreparedStatement preparedStatement = dbHelper
-//        .openStatement(connection, "SELECT * FROM p_user");
-//    ResultSet resultSet = dbHelper.openResultSet(preparedStatement);
-//
-//    int id = 0;
-//    String login = "";
-//    String password = "";
-//    UserType userType = null;
-//
-//    List<User> users = new ArrayList<>();
-//
-//    while (resultSet.next()) {
-//      id = resultSet.getInt("id");
-//      login = resultSet.getString("login");
-//      password = resultSet.getString("pass");
-////      userType = UserType.valueOf(resultSet.getString("role").toUpperCase());
-//      users.add(new User(id, login, password));
-//    }
-//
-//    dbHelper.closeResultSet(resultSet);
-//    dbHelper.closeStatement(preparedStatement);
-//    dbHelper.closeConnection(connection);
-//
-//    return users;
-//  }
+    String query = "SELECT t.ID, t.movie_id, t.ticket_seat_id, ts.row, ts.place "
+        + "FROM p_ticket AS t "
+        + "LEFT JOIN p_ticket_seat AS ts "
+        + "ON t.ticket_seat_id = ts.ID "
+        + "WHERE movie_id = " + id + " AND user_id is null;";
+    db.openPreparedStatement(connection, query);
+    ResultSet resultSet = db.openPreparedResultSet();
+
+    try {
+      while (resultSet.next()) {
+        result.add(
+            new Ticket(
+                resultSet.getInt("ID"),
+                resultSet.getInt("movie_id"),
+                new TicketSeat(
+                    resultSet.getInt("ticket_seat_id"),
+                    resultSet.getInt("row"),
+                    resultSet.getInt("place")
+                )
+            )
+        );
+      }
+    } catch (SQLException exception) {
+      exception.printStackTrace();
+    } finally {
+      db.closePreparedResultSet(resultSet);
+      db.closePreparedStatement();
+      db.closeConnection(connection);
+    }
+
+    return result;
+  }
 }

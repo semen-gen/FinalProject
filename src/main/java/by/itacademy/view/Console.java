@@ -22,8 +22,8 @@ public class Console {
     CS.welcomeMenu();
   }
 
-  public void printCinemaMenu(String login) {
-    System.out.println("Здравствуйте, "+ login);
+  public void printCinemaMenu() {
+    System.out.println("===============");
     System.out.println("Меню кинотеатра");
     System.out.println("1. Спиок фильмов");
     System.out.println("2. Купить билеты");
@@ -31,5 +31,11 @@ public class Console {
     System.out.println("4. Твои билеты");
     System.out.println("5. Выйти");
     CS.cinemaMenu();
+  }
+
+  public void printCinemaMenu(String login) {
+    System.out.println("===============");
+    System.out.println("Здравствуйте, " + login);
+    printCinemaMenu();
   }
 }
