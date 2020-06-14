@@ -38,4 +38,9 @@ public class Console {
     System.out.println("Здравствуйте, " + login);
     printCinemaMenu();
   }
+
+  public void printPurchaseDialog() {
+    System.out.println("Укажите id выбранных билетов через пробел");
+    CS.purchaseDialog();
+  }
 }

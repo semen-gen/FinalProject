@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class JDBCService {
 
@@ -201,5 +202,47 @@ public class JDBCService {
     }
 
     return result;
+  }
+
+  public List<Integer> getTicketsById(List<Integer> ids) {
+    List<Integer> result = new ArrayList<>();
+    DBHelper db = DBHelper.getInstance();
+    Connection connection = db.openConnection();
+
+    String query = "SELECT ID FROM p_ticket WHERE ID IN (" + ids.stream().map(Object::toString)
+        .collect(Collectors.joining(",")) + ") AND user_id IS NULL";
+    PreparedStatement preparedStatement = db.openPreparedStatement(connection, query);
+
+    ResultSet resultSet = db.openPreparedResultSet();
+    try {
+
+      while (resultSet.next()) {
+        result.add(resultSet.getInt("ID"));
+      }
+
+    } catch (SQLException exception) {
+      exception.printStackTrace();
+    } finally {
+
+      db.closePreparedResultSet(resultSet);
+      db.closePreparedStatement();
+      db.closeConnection(connection);
+    }
+
+    return result;
+  }
+
+  public void updateTickets(List<Integer> ids, int userId) {
+    DBHelper dbHelper = DBHelper.getInstance();
+    Connection connection = dbHelper.openConnection();
+
+    String query = "UPDATE p_ticket SET user_id = " + userId + " WHERE ID IN (" + ids.stream()
+        .map(Object::toString)
+        .collect(Collectors.joining(",")) + ");";
+    dbHelper.openStatement(connection);
+    dbHelper.update(query);
+
+    dbHelper.closeStatement();
+    dbHelper.closeConnection(connection);
   }
 }

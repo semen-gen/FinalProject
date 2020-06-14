@@ -14,4 +14,12 @@ public class TicetService {
   public List<Ticket> getAvailableTickets(int id) {
     return DB.availableTickets(id);
   }
+
+  public List<Integer> checkTickets(List<Integer> ids) {
+    return DB.getTicketsById(ids);
+  }
+
+  public void addUserToTickets(List<Integer> ids, int userId) {
+    DB.updateTickets(ids, userId);
+  }
 }

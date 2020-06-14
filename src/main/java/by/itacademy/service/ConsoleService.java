@@ -1,12 +1,16 @@
 package by.itacademy.service;
 
+import by.itacademy.exeptions.WrongProductID;
 import by.itacademy.model.Movie;
 import by.itacademy.model.Ticket;
 import by.itacademy.model.User;
 import by.itacademy.view.Console;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ConsoleService {
 
@@ -60,7 +64,7 @@ public class ConsoleService {
               getTickets();
               break;
             case 2:
-              System.out.println("2. Купить билеты");
+              CONSOLE.printPurchaseDialog();
               break;
             case 3:
               System.out.println("3. Вернуть билет");
@@ -79,6 +83,57 @@ public class ConsoleService {
       }
     }
     exit();
+  }
+
+  public void purchaseDialog() {
+    SCANNER.skip("\\n");
+    while (SCANNER.hasNext()) {
+      String result = SCANNER.nextLine();
+      checkIDForString(result);
+      List<Integer> ids = checkIdForBad(result);
+      if (ids.size() > 0) {
+        TS.addUserToTickets(ids, US.getCurrentUser().getID());
+        System.out.println("Билеты преобретены");
+        CONSOLE.printCinemaMenu();
+      }
+    }
+  }
+
+  private void checkIDForString(String result) {
+    Pattern notDecimals = Pattern
+        .compile("\\b[^\\d\\s]\\w+\\b|\\b\\w+[^\\d\\s]\\b|\\b\\d+[^\\d\\s]+\\d+\\b");
+    Matcher matcher = notDecimals.matcher(result);
+    while (matcher.find()) {
+      try {
+        throw new WrongProductID(matcher.group());
+      } catch (WrongProductID wrongProductID) {
+        wrongProductID.printMessage();
+      }
+    }
+  }
+
+  private List<Integer> checkIdForBad(String result) {
+    Pattern decimals = Pattern.compile("(\\b\\d+\\b)+");
+    Matcher matcher = decimals.matcher(result);
+    List<Integer> ids = new ArrayList<>();
+
+    while (matcher.find()) {
+      ids.add(Integer.valueOf(matcher.group()));
+    }
+    List<Integer> existIds = TS.checkTickets(ids);
+
+    if (ids.size() != existIds.size()) {
+      for (Integer item : ids) {
+        if (!existIds.contains(item)) {
+          try {
+            throw new WrongProductID(item);
+          } catch (WrongProductID wrongProductID) {
+            wrongProductID.printMessage();
+          }
+        }
+      }
+    }
+    return existIds;
   }
 
   private void getTickets() {

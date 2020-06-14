@@ -124,4 +124,11 @@ public class DBHelper {
     return id;
   }
 
+  public void update(String query) {
+    try {
+      statement.executeUpdate(query);
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+  }
 }
