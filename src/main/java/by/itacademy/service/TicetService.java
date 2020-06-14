@@ -27,4 +27,8 @@ public class TicetService {
   public List<Ticket> getUserTickets(User currentUser) {
     return DB.userTickets(currentUser);
   }
+
+  public void returnAllTickets(User currentUser) {
+    DB.unbindTickets(currentUser);
+  }
 }

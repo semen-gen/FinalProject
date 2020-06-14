@@ -286,4 +286,17 @@ public class JDBCService {
 
     return result;
   }
+
+  public void unbindTickets(User currentUser) {
+    DBHelper dbHelper = DBHelper.getInstance();
+    Connection connection = dbHelper.openConnection();
+
+    String query =
+        "UPDATE p_ticket SET user_id = null WHERE user_id = " + currentUser.getID() + " ;";
+    dbHelper.openStatement(connection);
+    dbHelper.update(query);
+
+    dbHelper.closeStatement();
+    dbHelper.closeConnection(connection);
+  }
 }

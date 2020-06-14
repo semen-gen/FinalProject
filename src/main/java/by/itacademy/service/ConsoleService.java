@@ -67,7 +67,9 @@ public class ConsoleService {
               CONSOLE.printPurchaseDialog();
               break;
             case 3:
-              System.out.println("3. Вернуть билет");
+              TS.returnAllTickets(US.getCurrentUser());
+              System.out.println("Все Ваши билеты возвращены");
+              CONSOLE.printCinemaMenu();
               break;
             case 4:
               printUserTickets();
@@ -103,8 +105,12 @@ public class ConsoleService {
   private void printUserTickets() {
     Map<Integer, Movie> map = MS.getMovies();
     List<Ticket> userTickets = TS.getUserTickets(US.getCurrentUser());
-    for (Ticket item : userTickets) {
-      System.out.println(item + " - " + map.get(item.getMOVIE_ID()).getName());
+    if (userTickets.size() > 0) {
+      for (Ticket item : userTickets) {
+        System.out.println(item + " - " + map.get(item.getMOVIE_ID()).getName());
+      }
+    } else {
+      System.out.println("У Вас нет билетов");
     }
   }
 
