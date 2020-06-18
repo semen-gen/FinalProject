@@ -1,6 +1,7 @@
 package by.itacademy.service;
 
 import by.itacademy.model.User;
+import by.itacademy.model.UserType;
 
 public class UserService {
 
@@ -23,7 +24,7 @@ public class UserService {
     return DB.isSetLogin(login);
   }
 
-  public User userRegister(String login, String pass) {
-    return currentUser = DB.addUser(login, pass);
+  public User userRegister(String login, String pass, UserType type) {
+    return currentUser = DB.addUser(login, pass, type);
   }
 }

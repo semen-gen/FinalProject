@@ -1,5 +1,8 @@
 package by.itacademy.model;
 
+import java.util.Arrays;
+import java.util.stream.Collector;
+
 public enum UserType {
 
   ADMIN(1),
@@ -14,5 +17,9 @@ public enum UserType {
 
   public int getId() {
     return id;
+  }
+
+  public static UserType getById(int id) {
+    return Arrays.stream(values()).filter(e -> e.getId() == id).findFirst().get();
   }
 }

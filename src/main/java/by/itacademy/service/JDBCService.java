@@ -4,6 +4,7 @@ import by.itacademy.model.Movie;
 import by.itacademy.model.Ticket;
 import by.itacademy.model.TicketSeat;
 import by.itacademy.model.User;
+import by.itacademy.model.UserType;
 import by.itacademy.util.DBHelper;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -48,10 +49,13 @@ public class JDBCService {
       if (resultSet.next()) {
         String rLogin, rPass;
         int rID;
+        UserType rType;
+
         rID = resultSet.getInt("ID");
         rLogin = resultSet.getString("login");
         rPass = resultSet.getString("pass");
-        user = new User(rID, rLogin, rPass);
+        rType = UserType.getById(resultSet.getInt("type_id"));
+        user = new User(rID, rLogin, rPass, rType);
       }
 
       dbHelper.closePreparedResultSet(resultSet);
@@ -90,12 +94,18 @@ public class JDBCService {
     return result;
   }
 
-  public User addUser(String login, String pass) {
+  public User addUser(String login, String pass, UserType type) {
     User user = null;
     DBHelper dbHelper = DBHelper.getInstance();
     Connection connection = dbHelper.openConnection();
 
-    String query = "INSERT INTO p_user VALUES (DEFAULT, \"" + login + "\",\"" + pass + "\" );";
+    String query =
+        "INSERT INTO p_user VALUES ("
+            + "DEFAULT, "
+            + "\"" + login + "\", "
+            + "\"" + pass + "\", "
+            + type.getId()
+            + " );";
     dbHelper.openStatement(connection);
     int id = dbHelper.insert(query);
 
@@ -103,7 +113,7 @@ public class JDBCService {
     dbHelper.closeConnection(connection);
 
     if (id > 0) {
-      user = new User(id, login, pass);
+      user = new User(id, login, pass, type);
     }
 
     return user;
@@ -211,7 +221,7 @@ public class JDBCService {
 
     String query = "SELECT ID FROM p_ticket WHERE ID IN (" + ids.stream().map(Object::toString)
         .collect(Collectors.joining(",")) + ") AND user_id IS NULL";
-    PreparedStatement preparedStatement = db.openPreparedStatement(connection, query);
+    db.openPreparedStatement(connection, query);
 
     ResultSet resultSet = db.openPreparedResultSet();
     try {

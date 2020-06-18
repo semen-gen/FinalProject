@@ -4,6 +4,7 @@ import by.itacademy.exeptions.WrongProductID;
 import by.itacademy.model.Movie;
 import by.itacademy.model.Ticket;
 import by.itacademy.model.User;
+import by.itacademy.model.UserType;
 import by.itacademy.view.Console;
 import java.util.ArrayList;
 import java.util.List;
@@ -194,7 +195,7 @@ public class ConsoleService {
     System.out.println("Введите пароль");
     pass = SCANNER.next();
 
-    User user = US.userRegister(login, pass);
+    User user = US.userRegister(login, pass, UserType.USER);
 
     checkUser(user, "Не удалось зарегистрироваться!");
   }
