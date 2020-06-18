@@ -235,7 +235,7 @@ public class ConsoleService {
       System.out.println();
       CONSOLE.start();
     } else {
-      CONSOLE.printCinemaMenu(user.getLogin());
+      CONSOLE.printMenu(user);
     }
   }
 

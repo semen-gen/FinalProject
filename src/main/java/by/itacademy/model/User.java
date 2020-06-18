@@ -37,4 +37,8 @@ public class User {
   public String toString() {
     return "Пользователь: " + ID + " " + login;
   }
+
+  public UserType getType() {
+    return type;
+  }
 }
