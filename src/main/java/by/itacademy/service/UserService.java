@@ -27,4 +27,8 @@ public class UserService {
   public User userRegister(String login, String pass, UserType type) {
     return currentUser = DB.addUser(login, pass, type);
   }
+
+  public void deleteCurrentUser() {
+    currentUser = null;
+  }
 }

@@ -29,7 +29,8 @@ public class Console {
     System.out.println("2. Купить билеты");
     System.out.println("3. Вернуть все билеты");
     System.out.println("4. Твои билеты");
-    System.out.println("5. Выйти");
+    System.out.println("5. Разлогиниться");
+    System.out.println("6. Выйти");
     CS.cinemaMenu();
   }
 

@@ -77,6 +77,9 @@ public class ConsoleService {
               CONSOLE.printCinemaMenu();
               break;
             case 5:
+              signOut();
+              break;
+            case 6:
               break exit;
             default:
               System.out.println("Такого пункта не существует");
@@ -87,6 +90,11 @@ public class ConsoleService {
       }
     }
     exit();
+  }
+
+  private void signOut() {
+    US.deleteCurrentUser();
+    CONSOLE.start();
   }
 
   public void purchaseDialog() {
