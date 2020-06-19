@@ -105,17 +105,23 @@ public class MovieService {
   }
 
   private void changeDate(Movie movie) {
-    System.out.println("Текущее дата и время: " + movie.getFormattedDate());
-    System.out.println("Введите новые дату и время для фильма");
+    boolean next = true;
     SCANNER.skip("\\n");
 
-    try {
-      LocalDateTime f = LocalDateTime.parse(SCANNER.nextLine(), movie.getFormatter());
-      movie.setFilmDate(f);
-    } catch (DateTimeParseException e) {
-      System.out.println("Вы ввели дату в неправильном формате");
-      changeDate(movie);
+    do {
+      System.out.println("Текущее дата и время: " + movie.getFormattedDate());
+      System.out.println("Введите новые дату и время для фильма");
+
+      try {
+        movie.setFilmDate(
+            LocalDateTime.parse(SCANNER.nextLine(), movie.getFormatter())
+        );
+        next = false;
+      } catch (DateTimeParseException e) {
+        System.out.println("Вы ввели дату в неправильном формате");
+      }
     }
+    while (next);
   }
 
   private void changeName(Movie movie) {
