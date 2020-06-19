@@ -110,7 +110,6 @@ public class ConsoleService {
               CONSOLE.printManagerMenu();
               break;
             case 2:
-              System.out.println("2. Редактировать фильм");
               MC.editMovieMenu();
               break;
             case 3:

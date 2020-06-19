@@ -10,7 +10,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -308,6 +308,27 @@ public class JDBCService {
     dbHelper.update(query);
 
     dbHelper.closeStatement();
+    dbHelper.closeConnection(connection);
+  }
+
+  public void saveMovie(Movie movie) {
+    DBHelper dbHelper = DBHelper.getInstance();
+    Connection connection = dbHelper.openConnection();
+
+    String query = "UPDATE p_movie SET name = ?, film_date = ?, price = ? WHERE ID = ? ;";
+    PreparedStatement preparedStatement = dbHelper.openPreparedStatement(connection, query);
+
+    try {
+      preparedStatement.setString(1, movie.getName());
+      preparedStatement.setTimestamp(2, Timestamp.valueOf(movie.getDate()));
+      preparedStatement.setInt(3, movie.getPrice());
+      preparedStatement.setInt(4, movie.getID());
+      preparedStatement.execute();
+    } catch (SQLException exception) {
+      exception.printStackTrace();
+    }
+
+    dbHelper.closePreparedStatement();
     dbHelper.closeConnection(connection);
   }
 }

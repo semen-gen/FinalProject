@@ -71,7 +71,8 @@ public class MovieService {
             mc.editMovieMenu(movie);
             break;
           case 4:
-            System.out.println("4. Выйти и сохранить изменения");
+            update(movie);
+            CS.userMenu();
             break;
           case 5:
             CS.userMenu();
@@ -128,5 +129,9 @@ public class MovieService {
     System.out.println("Введите новое название для фильма");
     SCANNER.skip("\\n");
     movie.setName(SCANNER.nextLine());
+  }
+
+  private void update(Movie movie) {
+    DB.saveMovie(movie);
   }
 }
