@@ -39,6 +39,6 @@ public class Movie {
 
   @Override
   public String toString() {
-    return ID + ". " + name + " показ: " + filmDate + " цена:" + price;
+    return ID + ". " + name + " показ: " + filmDate + " цена: " + price;
   }
 }

@@ -62,9 +62,11 @@ public class ConsoleService {
           switch (SCANNER.nextInt()) {
             case 1:
               printMovies(MS.getMovies());
-              getTickets();
+              CONSOLE.printCinemaMenu();
               break;
             case 2:
+              System.out.println("Выберите фильм");
+              getTickets();
               CONSOLE.printPurchaseDialog();
               break;
             case 3:
@@ -80,6 +82,50 @@ public class ConsoleService {
               signOut();
               break;
             case 6:
+              break exit;
+            default:
+              System.out.println("Такого пункта не существует");
+          }
+        } else {
+          System.out.println("Вы ввели неверные данные " + SCANNER.next());
+        }
+      }
+    }
+    exit();
+  }
+
+  public void managerMenu() {
+    exit:
+    {
+      while (SCANNER.hasNext()) {
+        if (SCANNER.hasNextInt()) {
+          switch (SCANNER.nextInt()) {
+            case 1:
+              printMovies(MS.getMovies());
+              CONSOLE.printManagerMenu();
+              break;
+            case 2:
+              System.out.println("2. Редактировать фильм");
+              break;
+            case 3:
+              System.out.println("3. Список билетов");
+              break;
+            case 4:
+              System.out.println("4. Список пользователей");
+              break;
+            case 5:
+              System.out.println("5. Спиок билетов пользователя");
+              break;
+            case 6:
+              System.out.println("6. Купить билеты для пользователя");
+              break;
+            case 7:
+              System.out.println("7. Вернуть билеты для пользователя");
+              break;
+            case 8:
+              signOut();
+              break;
+            case 9:
               break exit;
             default:
               System.out.println("Такого пункта не существует");
@@ -167,7 +213,7 @@ public class ConsoleService {
         id = SCANNER.nextInt();
         if (MS.checkMovie(id)) {
           printAvailableTickets(TS.getAvailableTickets(id), id);
-          CONSOLE.printCinemaMenu();
+          break;
         } else {
           System.out.println("Вы ввели неправильный id фильма");
         }
@@ -187,9 +233,12 @@ public class ConsoleService {
 
 
   private void printMovies(Map<Integer, Movie> movies) {
-    System.out.println("Выберите фильм");
-    for (Map.Entry<Integer, Movie> item : movies.entrySet()) {
-      System.out.println(item.getValue());
+    if (!movies.isEmpty()) {
+      for (Map.Entry<Integer, Movie> item : movies.entrySet()) {
+        System.out.println(item.getValue());
+      }
+    } else {
+      System.out.println("Фильмы отсутствуют! \nПриходите завтра!!!");
     }
   }
 
