@@ -10,6 +10,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -124,7 +125,7 @@ public class JDBCService {
     DBHelper db = DBHelper.getInstance();
     Connection connection = db.openConnection();
 
-    String query = "SELECT * FROM p_movie WHERE film_date > now()";
+    String query = "SELECT * FROM p_movie";
     db.openPreparedStatement(connection, query);
     ResultSet resultSet = db.openPreparedResultSet();
 
@@ -135,7 +136,7 @@ public class JDBCService {
             new Movie(
                 resultSet.getInt("ID"),
                 resultSet.getString("name"),
-                resultSet.getDate("film_date"),
+                resultSet.getTimestamp("film_date").toLocalDateTime(),
                 resultSet.getInt("price")
             )
         );

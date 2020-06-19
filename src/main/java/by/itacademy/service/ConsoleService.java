@@ -6,6 +6,7 @@ import by.itacademy.model.Ticket;
 import by.itacademy.model.User;
 import by.itacademy.model.UserType;
 import by.itacademy.view.Console;
+import by.itacademy.view.MovieConsole;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -20,13 +21,17 @@ public class ConsoleService {
   private final UserService US;
   private final MovieService MS;
   private final TicetService TS;
+  private final MovieConsole MC;
 
   public ConsoleService(Console console) {
     CONSOLE = console;
     SCANNER = new Scanner(System.in);
+
     US = new UserService();
-    MS = new MovieService();
+    MS = new MovieService(SCANNER);
     TS = new TicetService();
+
+    MC = new MovieConsole(MS);
   }
 
   public void welcomeMenu() {
@@ -106,6 +111,7 @@ public class ConsoleService {
               break;
             case 2:
               System.out.println("2. Редактировать фильм");
+              MC.editMovieMenu();
               break;
             case 3:
               System.out.println("3. Список билетов");
