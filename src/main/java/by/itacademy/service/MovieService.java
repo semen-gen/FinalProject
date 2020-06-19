@@ -11,11 +11,13 @@ public class MovieService {
 
   private final JDBCService DB;
   private final Scanner SCANNER;
+  private final ConsoleService CS;
   private Map<Integer, Movie> movies;
 
-  public MovieService(Scanner scanner) {
+  public MovieService(Scanner scanner, ConsoleService cs) {
     DB = JDBCService.getInstance();
     SCANNER = scanner;
+    CS = cs;
   }
 
   public Map<Integer, Movie> getMovies() {
@@ -53,35 +55,32 @@ public class MovieService {
   }
 
   public void editMovie(Movie movie, MovieConsole mc) {
-    exit:
-    {
-      while (SCANNER.hasNext()) {
-        if (SCANNER.hasNextInt()) {
-          switch (SCANNER.nextInt()) {
-            case 1:
-              changeName(movie);
-              mc.editMovieMenu(movie);
-              break;
-            case 2:
-              changeDate(movie);
-              mc.editMovieMenu(movie);
-              break;
-            case 3:
-              changePrice(movie);
-              mc.editMovieMenu(movie);
-              break;
-            case 4:
-              System.out.println("4. Выйти и сохранить изменения");
-              break exit;
-            case 5:
-              System.out.println("5. Выйти без сохранения");
-              break exit;
-            default:
-              System.out.println("Такого пункта не существует");
-          }
-        } else {
-          System.out.println("Вы ввели неверные данные " + SCANNER.next());
+    while (SCANNER.hasNext()) {
+      if (SCANNER.hasNextInt()) {
+        switch (SCANNER.nextInt()) {
+          case 1:
+            changeName(movie);
+            mc.editMovieMenu(movie);
+            break;
+          case 2:
+            changeDate(movie);
+            mc.editMovieMenu(movie);
+            break;
+          case 3:
+            changePrice(movie);
+            mc.editMovieMenu(movie);
+            break;
+          case 4:
+            System.out.println("4. Выйти и сохранить изменения");
+            break;
+          case 5:
+            CS.userMenu();
+            break;
+          default:
+            System.out.println("Такого пункта не существует");
         }
+      } else {
+        System.out.println("Вы ввели неверные данные " + SCANNER.next());
       }
     }
   }

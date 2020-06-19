@@ -69,17 +69,7 @@ public class Console {
   public void printMenu(User user) {
     System.out.println("===============");
     System.out.println("Здравствуйте, " + user.getLogin());
-    switch (user.getType()) {
-      case ADMIN:
-        printAdminMenu();
-        break;
-      case MANAGER:
-        printManagerMenu();
-        break;
-      case USER:
-        printCinemaMenu();
-        break;
-    }
+    CS.userMenu();
   }
 
   public void printPurchaseDialog() {

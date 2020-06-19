@@ -28,7 +28,7 @@ public class ConsoleService {
     SCANNER = new Scanner(System.in);
 
     US = new UserService();
-    MS = new MovieService(SCANNER);
+    MS = new MovieService(SCANNER, this);
     TS = new TicetService();
 
     MC = new MovieConsole(MS);
@@ -297,5 +297,19 @@ public class ConsoleService {
   private void exit() {
     SCANNER.close();
     System.exit(0);
+  }
+
+  public void userMenu() {
+    switch (US.getCurrentUser().getType()) {
+      case ADMIN:
+        CONSOLE.printAdminMenu();
+        break;
+      case MANAGER:
+        CONSOLE.printManagerMenu();
+        break;
+      case USER:
+        CONSOLE.printCinemaMenu();
+        break;
+    }
   }
 }
