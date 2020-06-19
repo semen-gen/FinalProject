@@ -113,7 +113,9 @@ public class ConsoleService {
               MC.editMovieMenu();
               break;
             case 3:
-              System.out.println("3. Список билетов");
+              System.out.println("Введите id фильма");
+              getTickets();
+              userMenu();
               break;
             case 4:
               System.out.println("4. Список пользователей");
