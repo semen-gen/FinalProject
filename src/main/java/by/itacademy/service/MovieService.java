@@ -67,7 +67,8 @@ public class MovieService {
               mc.editMovieMenu(movie);
               break;
             case 3:
-              System.out.println("3. Изменить цену билета");
+              changePrice(movie);
+              mc.editMovieMenu(movie);
               break;
             case 4:
               System.out.println("4. Выйти и сохранить изменения");
@@ -85,10 +86,29 @@ public class MovieService {
     }
   }
 
+  private void changePrice(Movie movie) {
+    boolean next = true;
+    SCANNER.skip("\\n");
+    do {
+      System.out.println("Текущая цена билета: " + movie.getPrice());
+      System.out.println("Введите новую цену");
+
+      try {
+        movie.setPrice(Integer.parseInt(SCANNER.nextLine()));
+        next = false;
+      } catch (NumberFormatException e) {
+        System.out.println("Вы ввели неверное значение.");
+        System.out.println("Нужно указать только цифру без пробелов");
+      }
+    }
+    while (next);
+  }
+
   private void changeDate(Movie movie) {
     System.out.println("Текущее дата и время: " + movie.getFormattedDate());
     System.out.println("Введите новые дату и время для фильма");
     SCANNER.skip("\\n");
+
     try {
       LocalDateTime f = LocalDateTime.parse(SCANNER.nextLine(), movie.getFormatter());
       movie.setFilmDate(f);
